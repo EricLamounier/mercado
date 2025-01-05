@@ -1,0 +1,54 @@
+.servico {
+    width: calc(100% - 20px);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 20px
+}
+
+.situacao {
+    --size: 10px;
+    --sizePulsa: 25px;
+    width: var(--size);
+    height: var(--size);
+    background-color: rgb(255, 0, 0);
+    border-radius: 100%;
+    position: relative;
+
+    .circle {
+        width: var(--size);
+        height: var(--size);
+        border-radius: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(255, 0, 0);
+        animation: situacaoPulsa 2s linear infinite;
+    }
+}
+
+.situacao.on {
+    background-color: rgb(3, 255, 3);
+    .circle {
+        background-color: rgb(0, 255, 0);
+    }
+}
+
+@keyframes situacaoPulsa {
+    0%{
+        width: var(--size);
+        height: var(--size);
+        opacity: 1;
+    }50%{
+        width: var(--sizePulsa);
+        height: var(--sizePulsa);
+        opacity: 0;
+    }100%{
+        width: var(--sizePulsa);
+        height: var(--sizePulsa);
+        opacity: 0;
+    }
+}
