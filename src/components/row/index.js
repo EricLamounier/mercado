@@ -31,6 +31,7 @@ function Checkbox({chk, item, updateItem}) {
     const handleCheckbox = (e) => {
         e.preventDefault()
         const isChecked = Number(checked) ? 0 : 1
+        console.log(isChecked)
 
         setChecked(isChecked)
         console.log(item)

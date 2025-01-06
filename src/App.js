@@ -104,7 +104,7 @@ function App() {
       })
       .catch(err => {
         setServerSituation(0)
-        setServerError(err)
+        setServerError(err.code)
       })
     }catch(err){
       console.warn(err)
