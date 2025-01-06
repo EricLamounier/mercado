@@ -17,7 +17,7 @@ export default function Row({item, updateItem, onClick}) {
         <div className={`row row-${item.checked}`} onClick={handleRow}>
             <p className='item'>{item.item}</p>
             <p className='qtd'>{item.quantidade}</p>
-            <p className='value'>{(item.valor !== null) && (item.valor !== 0) ? `R$ ${item.valor}` : ''}</p>
+            <p className='value'>{(item.valor !== null) && (item.valor !== 0) && (item.valor !== '') ? `R$ ${item.valor}` : ''}</p>
             <div onClick={stopPropagation}>
                 <Checkbox updateItem={updateItem} item={item} chk={item.checked} />
             </div>

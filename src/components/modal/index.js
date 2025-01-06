@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./style.css";
 
 import { Cross2Icon, ChevronRightIcon, TrashIcon } from "@radix-ui/react-icons";
+import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import dayjs from 'dayjs';
 
@@ -34,13 +35,30 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   };
 
   const handleSave = () => {
-    console.log(data)
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/post/item`, {
-      item, quantidade, valor, data: data.format('YYYY-MM-DD')
-    })
+    const temp_id = uuidv4()
+
+    const _data = {
+      id: temp_id,
+      temp_id: temp_id,
+      item, 
+      quantidade, 
+      valor,
+      data: data.format('YYYY-MM-DD'),
+      created_at: false,
+      checked: false,
+    }
+
+    addItem(_data)
+    handleCloseModal()
+
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/post/item`, _data)
     .then(res => {
-        addItem(res.data.data)
-        handleCloseModal()
+        const dt = res.data.data
+        _data.id = dt.id
+        _data.created_at = dt.created_at
+        
+        //addItem(res.data.data)
+        
     })
     .catch(err => {
         console.error(err)
@@ -48,21 +66,22 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   }
 
   const handleUpdate = () => {
-    axios.put(`${process.env.REACT_APP_BACKEND_URL}/put/item/${selectedItem.id}`, {
-      item, quantidade, valor, data, checked: Number(selectedItem.checked)
-    })
+
+    const _data = {
+      id: selectedItem.id,
+      created_at: selectedItem.created_at,
+      item, 
+      quantidade, 
+      valor: valor === '' ? null : valor, 
+      data, 
+      checked: selectedItem.checked
+    }
+    updateItem(_data)
+    handleCloseModal()
+    
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/put/item/${selectedItem.id}`, _data)
     .then(res => {
-      const updatedItem = {
-        id: selectedItem.id,
-        created_at: selectedItem.created_at,
-        item, 
-        quantidade, 
-        valor: valor === '' ? null : valor, 
-        data, 
-        checked: selectedItem.checked
-      }
-        updateItem(updatedItem)
-        handleCloseModal()
+      
     })
     .catch(err => {
         console.error(err)
@@ -71,9 +90,9 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
 
   const handleDelete = () => {
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/del/item/${selectedItem.id}`)
+    deleteItem(selectedItem)
+    handleCloseModal()
     .then(res => {
-        deleteItem(selectedItem)
-        handleCloseModal()
     })
     .catch(err => {
         console.error(err)
