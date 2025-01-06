@@ -46,9 +46,13 @@
         width: var(--sizePulsa);
         height: var(--sizePulsa);
         opacity: 0;
-    }100%{
+    }80%{
         width: var(--sizePulsa);
         height: var(--sizePulsa);
+        opacity: 0;
+    }100%{
+        width: var(--size);
+        height: var(--size);
         opacity: 0;
     }
 }

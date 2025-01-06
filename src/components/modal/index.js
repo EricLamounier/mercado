@@ -15,7 +15,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   const [week, setWeek] = useState('')
 
   useEffect(()=>{
-    setItem(selectedItem.item || '')
+    setItem(selectedItem.item || 'kkkk')
     setQuantidade(selectedItem.quantidade || 1)
     setValor(selectedItem.valor || '')
     setData(selectedItem.data || selectedDate.day(6))
@@ -34,10 +34,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   };
 
   const handleSave = () => {
-    //const url = 'https://mercadoapi.serveo.net'
-    const url = 'https://willing-enabling-mastiff.ngrok-free.app'
-
-    axios.post(`${url}/post/item`, {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/post/item`, {
       item, quantidade, valor, data
     })
     .then(res => {
@@ -50,11 +47,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   }
 
   const handleUpdate = () => {
-
-    //const url = 'https://mercadoapi.serveo.net'
-    const url = 'https://willing-enabling-mastiff.ngrok-free.app'
-
-    axios.put(`${url}/put/item/${selectedItem.id}`, {
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/put/item/${selectedItem.id}`, {
       item, quantidade, valor, data, checked: selectedItem.checked
     })
     .then(res => {
@@ -76,11 +69,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   }
 
   const handleDelete = () => {
-
-    //const url = 'https://mercadoapi.serveo.net'
-    const url = 'https://willing-enabling-mastiff.ngrok-free.app'
-    
-    axios.delete(`${url}/del/item/${selectedItem.id}`)
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/del/item/${selectedItem.id}`)
     .then(res => {
         deleteItem(selectedItem)
         handleCloseModal()

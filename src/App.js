@@ -42,10 +42,8 @@ function App() {
   const getItens = (date) => {
     const startOfWeek = date.startOf('week').format('YYYY-MM-DD');
     const endOfWeek = date.endOf('week').add(1, 'day').format('YYYY-MM-DD');
-    //const url = 'https://mercadoapi.serveo.net'
-    const url = 'https://willing-enabling-mastiff.ngrok-free.app'
     
-    axios.get(`${url}/get/itens`, {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/get/itens`, {
       params: {
         start: startOfWeek,
         end: endOfWeek
@@ -97,10 +95,9 @@ function App() {
 
   const checkServidor = async () => {
     console.log('Verificando servidor...')
-    //const url = 'https://mercadoapi.serveo.net'
-    const url = 'https://willing-enabling-mastiff.ngrok-free.app'
+ 
     try{
-      await axios.get(`${url}/check`)
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}/check`)
       .then(res => {
         setServerSituation(1)
         console.log('Servidor ativo!')
