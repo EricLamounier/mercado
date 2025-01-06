@@ -51,7 +51,7 @@ function Checkbox({chk, item, updateItem}) {
 
     return (
         <label className="checkbox" onClick={handleCheckbox}>
-            <input checked={chk} type="checkbox"  onChange={handleCheckbox}/>
+            <input checked={Number(chk)} type="checkbox"  onChange={handleCheckbox}/>
             <div className="checkmark"></div>
         </label>
     )
