@@ -89,9 +89,9 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   }
 
   const handleDelete = () => {
-    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/del/item/${selectedItem.id}`)
     deleteItem(selectedItem)
     handleCloseModal()
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/del/item/${selectedItem.id}`)
     .then(res => {
     })
     .catch(err => {
