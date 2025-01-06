@@ -49,7 +49,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
 
   const handleUpdate = () => {
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/put/item/${selectedItem.id}`, {
-      item, quantidade, valor, data, checked: selectedItem.checked
+      item, quantidade, valor, data, checked: Number(selectedItem.checked)
     })
     .then(res => {
       const updatedItem = {
