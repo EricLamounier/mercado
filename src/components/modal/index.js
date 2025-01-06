@@ -15,7 +15,7 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   const [week, setWeek] = useState('')
 
   useEffect(()=>{
-    setItem(selectedItem.item || 'kkkk')
+    setItem(selectedItem.item || '')
     setQuantidade(selectedItem.quantidade || 1)
     setValor(selectedItem.valor || '')
     setData(selectedItem.data || selectedDate.day(6))
@@ -34,8 +34,9 @@ export default function Modal({ isOpen = false, onClose, type=1, selectedDate, u
   };
 
   const handleSave = () => {
+    console.log(data)
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/post/item`, {
-      item, quantidade, valor, data
+      item, quantidade, valor, data: data.format('YYYY-MM-DD')
     })
     .then(res => {
         addItem(res.data.data)
