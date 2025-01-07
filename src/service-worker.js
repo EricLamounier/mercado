@@ -47,14 +47,8 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Notify clients when the service worker is updated and active
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    (async () => {
-      const clients = await self.clients.matchAll({ type: 'window' });
-      for (const client of clients) {
-        client.postMessage({ type: 'NEW_VERSION_AVAILABLE' });
-      }
-    })()
-  );
+self.addEventListener('controllerchange', () => {
+  if (self.skipWaiting) {
+    self.skipWaiting();
+  }
 });
