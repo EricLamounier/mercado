@@ -11,6 +11,10 @@ body {
   font-size: 14px;
 }
 
+input {
+  font-size: 14px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
