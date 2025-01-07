@@ -47,8 +47,23 @@ self.addEventListener('message', (event) => {
   }
 });
 
+// Listen for updates and notify the client
+self.addEventListener('install', (event) => {
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const clients = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients) {
+        client.postMessage({ type: 'SW_UPDATED' });
+      }
+    })()
+  );
+});
+
+// Reload the page when the service worker is updated
 self.addEventListener('controllerchange', () => {
-  if (self.skipWaiting) {
-    self.skipWaiting();
-  }
+  window.location.reload();
 });

@@ -17,6 +17,49 @@ dayjs.extend(customParseFormat);
 
 function App() {
 
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        if (registration.waiting) {
+          notifyUser(registration);
+        }
+  
+        registration.addEventListener('updatefound', () => {
+          const installingWorker = registration.installing;
+          if (installingWorker) {
+            installingWorker.addEventListener('statechange', () => {
+              if (
+                installingWorker.state === 'installed' &&
+                navigator.serviceWorker.controller
+              ) {
+                notifyUser(registration);
+              }
+            });
+          }
+        });
+      });
+  
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data.type === 'SW_UPDATED') {
+          notifyUser();
+        }
+      });
+    });
+  }
+  
+  function notifyUser(registration) {
+    const userConfirmed = window.confirm(
+      'Há uma nova versão disponível. Atualizar agora?'
+    );
+    if (userConfirmed) {
+      if (registration && registration.waiting) {
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    }
+  }
+  
+
   const [itens, setItens] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false);
