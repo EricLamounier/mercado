@@ -11,13 +11,14 @@ import Row from './components/row';
 import Modal from './components/modal';
 import LetsStart from './components/letsStart';
 import Servicos from './components/servicos';
+import Loading from './components/loading';
 
 dayjs.locale('pt-br');
 dayjs.extend(customParseFormat);
 
 function App() {
 
-  if ('serviceWorker' in navigator) {
+  /*if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/service-worker.js').then((registration) => {
         if (registration.waiting) {
@@ -57,9 +58,8 @@ function App() {
       }
       window.location.reload();
     }
-  }
+  }*/
   
-
   const [itens, setItens] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,6 +68,7 @@ function App() {
   const [serverError, setServerError] = useState('')
   const [selectedDate, setSelectedDate] = useState(dayjs())
   const [formatedWeek, setFormatedWeek] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   const updateItem = (updatedItem) => {
     const newItens = itens.map((item) =>
@@ -82,11 +83,12 @@ function App() {
     setItens(sortedItens);
   }
 
-  const getItens = (date) => {
+  const getItens = async (date) => {
+    setIsLoading(true)
     const startOfWeek = date.startOf('week').format('YYYY-MM-DD');
     const endOfWeek = date.endOf('week').add(1, 'day').format('YYYY-MM-DD');
     
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/get/itens`, {
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/get/itens`, {
       params: {
         start: startOfWeek,
         end: endOfWeek
@@ -97,7 +99,9 @@ function App() {
     })
     .catch(err => {
       console.error(err)
-    })
+    }).finally(()=>{
+      setIsLoading(false)
+    })    
   }
 
   const addItem = (item) => {
@@ -207,6 +211,7 @@ function App() {
         formatedDate={formatedDate}
         selectedDate={selectedDate}
       />
+      {isLoading && <Loading />}
     </div>
   );
 }
