@@ -43,15 +43,16 @@ registerRoute(
 // Skip waiting when a new service worker is installed
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+    self.skipWaiting(); // Force the new SW to take control immediately
   }
 });
 
-// Listen for updates and notify the client
+// Listen for the install event and activate the new SW immediately
 self.addEventListener('install', (event) => {
-  event.waitUntil(self.skipWaiting());
+  event.waitUntil(self.skipWaiting()); // Force the new SW to take control immediately
 });
 
+// Activate event to clean up old caches and notify clients
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
@@ -59,11 +60,21 @@ self.addEventListener('activate', (event) => {
       for (const client of clients) {
         client.postMessage({ type: 'SW_UPDATED' });
       }
+
+      // Clean up old caches if necessary
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== self.cacheName) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
     })()
   );
 });
 
-// Reload the page when the service worker is updated
+// Force the page to reload when the service worker is updated
 self.addEventListener('controllerchange', () => {
-  window.location.reload();
+  window.location.reload(); // Ensure the page reloads when a new SW is activated
 });
