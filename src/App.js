@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '@radix-ui/react-ico
 import axios from 'axios';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import 'dayjs/locale/pt-br'
+import 'dayjs/locale/pt-br' 
 
 import Row from './components/row';
 import Modal from './components/modal';
