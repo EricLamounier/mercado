@@ -1,9 +1,11 @@
-const CACHE_NAME = "my-pwa-cache-v1";
+const CACHE_VERSION = "v1"; // Versão do cache para o build atual
+const CACHE_NAME = `my-pwa-cache-${CACHE_VERSION}`;
 const urlsToCache = [
   "/",
   "/index.html",
   "/offline.html",
   "/manifest.json",
+  // Adicione outros recursos estáticos aqui
 ];
 
 // Instalação do Service Worker
@@ -11,6 +13,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log("Cache inicializado");
+      // Cacheando arquivos principais
       return cache.addAll(urlsToCache);
     })
   );
@@ -24,8 +27,8 @@ self.addEventListener("fetch", (event) => {
         response ||
         fetch(event.request)
           .then((fetchResponse) => {
-            // Cacheando dinamicamente arquivos
-            if (!event.request.url.includes("chrome-extension")) {
+            // Cacheando arquivos JS e CSS gerados no build
+            if (!event.request.url.includes("chrome-extension") && !event.request.url.includes("/offline.html")) {
               return caches.open(CACHE_NAME).then((cache) => {
                 cache.put(event.request, fetchResponse.clone());
                 return fetchResponse;
@@ -33,7 +36,10 @@ self.addEventListener("fetch", (event) => {
             }
             return fetchResponse;
           })
-          .catch(() => caches.match("/offline.html")) // Fallback offline
+          .catch(() => {
+            // Caso falhe, retorna a página offline
+            return caches.match("/offline.html");
+          })
       );
     })
   );
