@@ -118,11 +118,11 @@ function App() {
 
   useEffect(()=>{
     setFormatedWeek(formatedDate(selectedDate))
-    //getItens(selectedDate)
+    getItens(selectedDate)
     
-    //checkServidor()
+    checkServidor()
     setInterval(()=>{
-      //checkServidor()
+      checkServidor()
     }, [5 * 60 * 1000])
   }, [])
 
