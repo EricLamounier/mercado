@@ -17,48 +17,6 @@ dayjs.locale('pt-br');
 dayjs.extend(customParseFormat);
 
 function App() {
-
-  /*if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-        if (registration.waiting) {
-          notifyUser(registration);
-        }
-  
-        registration.addEventListener('updatefound', () => {
-          const installingWorker = registration.installing;
-          if (installingWorker) {
-            installingWorker.addEventListener('statechange', () => {
-              if (
-                installingWorker.state === 'installed' &&
-                navigator.serviceWorker.controller
-              ) {
-                notifyUser(registration);
-              }
-            });
-          }
-        });
-      });
-  
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data.type === 'SW_UPDATED') {
-          notifyUser();
-        }
-      });
-    });
-  }
-  
-  function notifyUser(registration) {
-    const userConfirmed = window.confirm(
-      'Há uma nova versão disponível. Atualizar agora?'
-    );
-    if (userConfirmed) {
-      if (registration && registration.waiting) {
-        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      }
-      window.location.reload();
-    }
-  }*/
   
   const [itens, setItens] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
@@ -68,7 +26,7 @@ function App() {
   const [serverError, setServerError] = useState('')
   const [selectedDate, setSelectedDate] = useState(dayjs())
   const [formatedWeek, setFormatedWeek] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const updateItem = (updatedItem) => {
     const newItens = itens.map((item) =>
@@ -160,11 +118,11 @@ function App() {
 
   useEffect(()=>{
     setFormatedWeek(formatedDate(selectedDate))
-    getItens(selectedDate)
+    //getItens(selectedDate)
     
-    checkServidor()
+    //checkServidor()
     setInterval(()=>{
-      checkServidor()
+      //checkServidor()
     }, [5 * 60 * 1000])
   }, [])
 
