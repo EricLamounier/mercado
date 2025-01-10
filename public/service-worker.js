@@ -1,5 +1,10 @@
 const CACHE_NAME = "my-pwa-cache-v1";
-const urlsToCache = ["/", "/index.html", "/offline.html", "/manifest.json"];
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/offline.html",
+  "/manifest.json",
+];
 
 // Instalação do Service Worker
 self.addEventListener("install", (event) => {
@@ -15,15 +20,18 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      // Retorna do cache se disponível, caso contrário, busca online e adiciona ao cache
       return (
         response ||
         fetch(event.request)
           .then((fetchResponse) => {
-            return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, fetchResponse.clone());
-              return fetchResponse;
-            });
+            // Cacheando dinamicamente arquivos
+            if (!event.request.url.includes("chrome-extension")) {
+              return caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, fetchResponse.clone());
+                return fetchResponse;
+              });
+            }
+            return fetchResponse;
           })
           .catch(() => caches.match("/offline.html")) // Fallback offline
       );
